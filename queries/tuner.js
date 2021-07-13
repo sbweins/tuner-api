@@ -33,8 +33,29 @@ const createTune = async (tune) => {
   }
 };
 
+const updateTune = async (id, tune) => {
+  try {
+    return await db.one(
+      "UPDATE tuner SET name = $1, artist = $2, album = $3, time = $4, is_favorite = $5 WHERE id=$6 RETURNING *;",
+      [tune.name, tune.artist, tune.album, tune.time, tune.is_favorite, id]
+    );
+  } catch (e) {
+    return e;
+  }
+};
+
+const deleteTune = async (id) => {
+  try {
+    return await db.one("DELETE FROM tuner WHERE id=$1 RETURNING *;", id);
+  } catch (e) {
+    return e;
+  }
+};
+
 module.exports = {
   getTuner,
   getTune,
   createTune,
+  updateTune,
+  deleteTune,
 };
